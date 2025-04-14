@@ -1,0 +1,41 @@
+Network allows containers to talk to each other.
+Let us consider 2 cases:
+1. There are 2 container which can talk to talk to each other.
+2. There is an islotaion between 2 containers and they cannot talk to each other.
+
+Types of Network in Containers:
+1. Bridge network.
+2. Host network.
+3. Overlay network
+
+1. Bridge network
+When a host is created, by default "eth0" is created and similarly when a container or any other resouce is created, an "eth0" of the resource is also created. So, the docker createas a "Virtual Ehernet" or "Veth0" which connects the "eth0" of the host to "eth0" of the container and they talk to each other.
+
+Since the subnet of both the host eth0 and container eth0 are different, it requires Veth0 to coneect. 
+If you inspect the container's network section, you will see the IP address are different for both the containers. 
+But since they want to talk to host, they need Veth.
+This is called Bridge network, since Bridge is required for containers to talk to host and this is the DEFAULT Network.
+
+2. Host network
+In host network, the containers are binded to the host eth0 keeping all the containers and the host in the same network.
+
+This is not recommended and very problamatic, since the concept of containers was to isloate them and use minimum system dependencies.
+If container is in the same network as host, then hacker can hack the host and hack the container as well. 
+
+The above 2 methods can cause 2 containers to talk to each other.
+
+But if you don't want your containers to talk to each other which is case 2, then you can create your custom network.
+So now, instead of using Veth0 created by docker, you will use your custom docker network. So, now your containers cannot talk to each other.
+
+Commands:
+
+1. To create custom network:
+docker network create <network_name>
+
+2. To assign the network to the container
+docker run -d --network <network_name> <image_name>
+
+3. To assign host network:
+docker run -d --network=host <image_name>
+
+In Host network, the ip of containers will b empty, since they are in same network as host.

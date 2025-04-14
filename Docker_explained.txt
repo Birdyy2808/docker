@@ -1,0 +1,103 @@
+Before Understanding Docker, we need to understand the Concept of Virtual Machine and Virualization.
+Virtualization: In Virtualization, we install Hypervisor such as VMWare or Xen on the physical server which create logical seperation on the physical serer giving rise to Virtual Machine. Virtual Machines(VM) have their own guest OS and Hypervisor monitors the VMs.
+
+Architecture of VM:
+
+3. VM1 VM2 ....
+----------------------------
+2. Hypervisor
+----------------------------
+1. Physical server
+
+Docker Containers:
+Docker container is a light weight package that bundles your application, application dependencies and system dependencies.
+Containers use the concept of containerization where the containers do not use the whole OS but only few system dependencies in the form of Base Image and the other resources are used from the host OS they are running on.
+
+Docker system dependencies includes the following:
+/bin : Contains the binaries executionable files such as ls, cp etc.
+/sbin: Contains the system binary executionable such as init etc.
+/lib : Contains library files used to execute binaries.
+/root: Home directory of root user.
+/etc : Contains the configurable files.
+/var : Contains the variable data such log files etc.
+
+These folders form the logical seperation between the 'n' containers and 2 containers cannot share the same files.
+The reason for this is, if they share then the container's sucurity is compromised. A Hacker having access to one container can have the access to other container as well.
+
+The files used from Kernel or the host OS are:
+1. Host File system
+2. Network stacks
+3. System calls
+4. Namespace
+5. Control groups
+
+Docker container can be deployed in 2 ways:
+a. Directly on the host physical server.
+
+Container1   Container2 ....
+-----------------------
+3. Docker
+-----------------------
+2. OS
+-----------------------
+1. Pysical Server
+
+
+b. On the Virtual Machine
+
+
+5 Container1 Container2
+--------------------------
+4. Docker
+--------------------------
+3. Vitual Machine
+--------------------------
+2. Hypervisor
+--------------------------
+1. Physical server
+
+Docker:
+Docker is an open-source platform that allows us to create containers.
+If Containerization is a concept, then Docker is a platform that implements Containerization.
+
+Docker Lifecycle:
+
+Write a DockerfIle -------> Build the dockerfile to build an image ------> Run the image to create a container
+
+Dockerfile: It is a file that contains the instructions on how to build an image.
+
+Image     : Image is a readonly template that provide instruction on how to run a container.
+
+Container : COntainer is a package that bundles the application, application dependencies and system dependencies.
+
+Architecture of Docker.
+
+Docker Client ------> Docker Daemon ------> Docker repository(In case you want to push the image to Registry)
+
+Docker client    : Using Docker Client or cli, we send the request to build Container imgages or to run the Container.
+
+Docker Daemon    : Docker Daemon or DockerD is the heart of the Docker which accepts the request from client. If DockerD is not working, then we will not be able to perform any operation and Docker is brain dead.
+
+Docker Repository: Once the image is built, we can push the image to Docker repository which is a registry thay contains images.
+
+Issues with Docker:
+1. Docker Daemon is the single point of failure, if it stops working, no operations can be performed on the container.
+2, When Image is built, saveral layers are created which takes up space.
+
+BUILDAH can solve these problem.
+
+
+Multi-Stage Dockerfile:
+To reduce the size of the Docker image, Multi-Stage docker file is created. 
+The Dockerfile is created in different stages, and finally the artifacts or binaries from the previous stages are copied to next/final stage.
+In Multi-Stage Dockerfile, there can be 'n' stages and will just build the binaries, while the final stage will use these binaries and be part of the image, hence reducing the size of the image significantly.
+This also provide security as the final image will only have the runtime to run the application and will copy the binaries from previous stages, which reduces the risk of vulnerability present inside the packages.
+
+Distroless Images:
+Distroless images can be used in the final stage of the Dockerfile. 
+It is a minimalistic image which is required to run a container containing hardly any pacakes and only runtime which further reduces the size and provide utmost security.
+
+
+
+
+

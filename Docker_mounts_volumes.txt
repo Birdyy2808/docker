@@ -1,0 +1,26 @@
+Let's take 2 scenarios:
+1. There is a Ingress container that is logging the incoming requests. Suddenly the container went down. Since, containers are ephimeral in nature, all the logs of incoming requests are LOST.
+2. Suppose there are 2 containers, 1st container is frontend and the 2nds container is backend. The 1st container is reading some files from backed and giving the response. For some reason, the 2nd container went down, now the 1st container cannot read the files and give the response, since all the information is LOST.
+
+To solve the problem of Ephimeral nature of docker container, Mounts and Volumes concept came into picture.
+
+Docker Mounts:
+In Docker Mounts, a specific directory of host is binded to the specific directory in container.
+But in this, the limitation is only the host directory can be binded.
+
+Docker Volumes:
+Docker Volumes is similar to Docker mounts, but it gives more freedom to user to create the volumes on any other VM, same host etc.
+And then bind the volume to the container. 
+Also, same volumes can be binded to multiple countainers.
+
+Commands:
+
+1. To create a volume
+docker volume create <volume name>
+
+2. Bind the volume
+docker run -d --mount <volume name> source=<path to the volume>, target=<path inside the container> <image_name>
+
+
+To check if the volume is binded, we can inspect the container and check the mount section using the command
+docker inspect <container id>
